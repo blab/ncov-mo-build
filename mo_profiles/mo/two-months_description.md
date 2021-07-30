@@ -1,0 +1,1 @@
+This analysis focuses on SARS-CoV-2 sequences available from Missouri sampled in the last two months. Additional sequences from the rest of the USA and the world are selected by genetic similarity to the state-level sequences. Additionally, earlier sequences from Missouri and globally are provided for temporal context.

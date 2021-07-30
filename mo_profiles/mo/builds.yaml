@@ -1,0 +1,99 @@
+# Defines next align specs
+genes: ["ORF1a", "ORF1b", "S", "ORF3a", "M", "N"]
+use_nextalign: true
+conda_environment: "workflow/envs/nextstrain.yaml"
+
+# Define custom rules
+custom_rules:
+  - mo_profiles/mo/add_to_builds.smk
+
+# Define custom auspice configuration to enable frequencies.
+# Define subsclades.
+files:
+  auspice_config: "mo_profiles/mo/auspice_config.json"
+
+# Define WA builds.
+builds:
+  mo_2m:
+    title: "Missouri-focused SARS-CoV-2 genomic analysis: Past two months"
+    description: mo_profiles/mo/two-months_description.md
+    division: Missouri
+    subsampling_scheme: two-month
+
+# remove S dropout sequences and sequences without division label in US
+filter:
+  exclude_where: "division='USA' purpose_of_sequencing='S dropout'"
+
+# Define subsampling scheme for builds. This scheme should include as much
+# local diversity for a given division as possible and contextual samples from
+# the rest of the USA and the world.
+subsampling:
+  two-month:
+    # Subsampling for a given time window
+    local-focus:
+      # Evenly sample from earliest_date to latest_date for the current division.
+      min_date: --min-date {earliest_date}
+      query: --query "(country == 'USA' & division == '{division}')"
+    usa-context:
+      # Sampling in the time window from other divisions in the USA, prioritizing
+      # samples genetically similar to the current division's sequences.
+      group_by: "year month"
+      max_sequences: 650
+      min_date: --min-date {earliest_date}
+      query: --query "(country == 'USA' & division != '{division}')"
+      priorities:
+        type: proximity
+        focus: local-focus
+    global-context:
+      # Even sampling in the time window from across the world excluding the USA,
+      # prioritizing samples genetically similar to current division's sequences.
+      group_by: "region year month"
+      max_sequences: 650
+      min_date: --min-date {earliest_date}
+      query: --query "(country != 'USA')"
+      priorities:
+        type: proximity
+        focus: local-focus
+    usa-context-4m:
+      # Sampling in the time window from other divisions in the USA, prioritizing
+      # samples genetically similar to the current division's sequences.
+      group_by: "year month"
+      max_sequences: 200
+      max_date: --max-date {earliest_date}
+      min_date: --min-date {background_date}
+      query: --query "(country == 'USA')"
+      priorities:
+        type: proximity
+        focus: local-focus
+    global-context-4m:
+      # Even sampling in the time window from across the world excluding the USA,
+      # prioritizing samples genetically similar to current division's sequences.
+      group_by: "region year month"
+      max_sequences: 200
+      max_date: --max-date {earliest_date}
+      min_date: --min-date {background_date}
+      query: --query "(country != 'USA')"
+      priorities:
+        type: proximity
+        focus: local-focus
+    usa-context-early:
+      # Even sampling before the time window for the current division,
+      # prioritizing samples genetically similar to divison's sequences
+      # within the time window.
+      group_by: "year month"
+      max_sequences: 200
+      max_date: --max-date {background_date}
+      query: --query "(country == 'USA')"
+      priorities:
+        type: proximity
+        focus: local-focus
+    global-context-early:
+      # Even sampling before the time window from the world, excluding USA,
+      # prioritizing samples genetically similar to the division.
+      group_by: "region year month"
+      max_sequences: 200
+      max_date: --max-date {background_date}
+      query: --query "(division != '{division}')"
+      priorities:
+        type: proximity
+        focus: local-focus
