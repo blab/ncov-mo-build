@@ -53,7 +53,7 @@ inputs:
 
 Next, run the workflow on AWS using Nextstrain build using the below command from inside the `ncov-wa-build` folder. Update memory and CPUs as desired:
 ```
-nextstrain build --detach --aws-batch --cpus 16 --memory 32gb . --profile wa_profiles/wa-subsampled-background/
+nextstrain build --detach --aws-batch --cpus 16 --memory 32gb . --profile mo_profiles/mo/
 ```
 
 # Running with all GISAID contextual dataset
@@ -71,12 +71,8 @@ nextstrain build --detach --aws-batch --cpus 16 --memory 32gb . --profile wa_pro
 ```
 
 ## If Nextstrain team member
-If running on Fred Hutch rhino cluster:
-```
-snakemake --profile wa_profiles/wa-rhino/
-```
 
 If running with AWS:
 ```
-nextstrain build --detach --aws-batch --cpus 16 --memory 32gb . --profile wa_profiles/wa/
+nextstrain build --detach --aws-batch --cpus 16 --memory 32gb . --profile mo_profiles/mo/
 ```

@@ -1,6 +1,5 @@
 configfile:
-  - wa_profiles/mo/builds.yaml
-  - wa_profiles/mo/input.yaml
+  - mo_profiles/mo/builds.yaml
 
 cores: 8
 keep-going: True

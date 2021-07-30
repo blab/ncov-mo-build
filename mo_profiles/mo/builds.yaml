@@ -7,6 +7,12 @@ conda_environment: "workflow/envs/nextstrain.yaml"
 custom_rules:
   - mo_profiles/mo/add_to_builds.smk
 
+
+inputs:
+  - name: gisaid
+    metadata: "s3://nextstrain-ncov-private/metadata.tsv.gz"
+    filtered: "s3://nextstrain-ncov-private/filtered.fasta.xz"
+
 # Define custom auspice configuration to enable frequencies.
 # Define subsclades.
 files:
@@ -14,7 +20,7 @@ files:
 
 # Define WA builds.
 builds:
-  mo_2m:
+  mo:
     title: "Missouri-focused SARS-CoV-2 genomic analysis: Past two months"
     description: mo_profiles/mo/two-months_description.md
     division: Missouri
